@@ -4,9 +4,7 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fff5e1d8-0ba0-491f-b31f-5d5099c2a962" name="Default Changelist" comment="new travis file">
-      <change afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
-    </list>
+    <list default="true" id="fff5e1d8-0ba0-491f-b31f-5d5099c2a962" name="Default Changelist" comment="new travis file" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,7 +177,7 @@
       <workItem from="1562230234170" duration="4861000" />
       <workItem from="1562235790151" duration="7415000" />
       <workItem from="1562243420559" duration="3495000" />
-      <workItem from="1562247769091" duration="7513000" />
+      <workItem from="1562247769091" duration="7982000" />
     </task>
     <task id="LOCAL-00001" summary="travis file and commands to push images to docker hub after test and build completes">
       <created>1562256738737</created>
@@ -202,11 +200,18 @@
       <option name="project" value="LOCAL" />
       <updated>1562260016538</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="new travis file">
+      <created>1562260242446</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1562260242446</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37284000" />
+    <option name="totallyTimeSpent" value="37753000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -219,7 +224,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="164" y="23" width="1400" height="907" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27172312" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
