@@ -3,22 +3,20 @@ services:
   - docker
 
 before_install:
-  - docker build -t uokereh/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t uokereh/docker-react -f Dockerfile.dev .
 
 script:
-  - docker run uokereh/react-test npm test -- --coverage
+  - docker run uokereh/docker-react npm run test -- --coverage
 
-after_success:
-  -docker build -t uokereh/multi-client ./client
-  -docker build -t uokereh/multi-nginx ./nginx
-  -docker build -t uokereh/multi-server ./server
-  -docker build -t uokereh/multi-worker ./worker
-
-  # Log into the docker CLI
-  - echo "$DOCK_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-
-  # Take those images and push them to docker hub
-  - docker push uokereh/multi-client
-  - docker push uokereh/multi-nginx
-  - docker push uokereh/multi-server
-  - docker push uokereh/multi-worker
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "docker-react"
+  env: "DockerReact-env"
+  bucket_name: "elasticbeanstalk-us-east-1-958923515642"
+  bucket_path: "docker-react"
+  on:
+    branch: master
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
