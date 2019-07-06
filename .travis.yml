@@ -8,17 +8,3 @@ before_install:
 script:
   - docker run uokereh/multi-docker npm run test -- --coverage
 
-after_success:
-  -docker build -t uokereh/multi-client ./client
-  -docker build -t uokereh/multi-nginx ./nginx
-  -docker build -t uokereh/multi-server ./server
-  -docker build -t uokereh/multi-worker ./worker
-
-  # Log into the docker CLI
-  - echo "$DOCK_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-
-  # Take those images and push them to docker hub
-  - docker push uokereh/multi-client
-  - docker push uokereh/multi-nginx
-  - docker push uokereh/multi-server
-  - docker push uokereh/multi-worker
