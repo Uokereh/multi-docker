@@ -8,3 +8,8 @@ before_install:
 script:
   - docker run uokereh/multi-docker npm test -- --coverage
 
+after_success:
+  -docker build -t uokereh/multi-client ./client
+  -docker build -t uokereh/multi-nginx ./nginx
+  -docker build -t uokereh/multi-server ./server
+  -docker build -t uokereh/multi-worker ./worker
