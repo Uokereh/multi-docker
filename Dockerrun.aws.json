@@ -1,0 +1,37 @@
+{
+  "AWSEBDockerrunVersion" : 2,
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "uokereh/multi-client",
+      "hostname": "client",
+      "essential": false
+    },
+    {
+      "name": "server",
+      "image": "uokereh/multi-server",
+      "hostname": "api",
+      "essential": false
+    },
+    {
+      "name": "worker",
+      "image": "uokereh/multi-worker",
+      "hostname": "server",
+      "essential": false
+    },
+    {
+      "name": "nginx",
+      "image": "uokereh/multi-nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": ["client", "server"]
+
+    }
+  ]
+}
