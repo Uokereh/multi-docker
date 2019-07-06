@@ -9,14 +9,14 @@ script:
   - docker run uokereh/multi-docker npm run build
 
 after_success:
-  -docker build -t uokereh/multi-client ./client
-  -docker build -t uokereh/multi-nginx ./nginx
-  -docker build -t uokereh/multi-server ./server
-  -docker build -t uokereh/multi-worker ./worker
+  -docker build -t uokereh/client ./client
+  -docker build -t uokereh/nginx ./nginx
+  -docker build -t uokereh/server ./server
+  -docker build -t uokereh/worker ./worker
 
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-  - docker push uokereh/multi-client
-  - docker push uokereh/multi-nginx
-  - docker push uokereh/multi-server
-  - docker push uokereh/multi-worker
+  - docker push uokereh/client
+  - docker push uokereh/nginx
+  - docker push uokereh/server
+  - docker push uokereh/worker
