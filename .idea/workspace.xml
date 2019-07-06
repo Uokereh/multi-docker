@@ -4,9 +4,8 @@
     <option name="SCOPE_TYPE" value="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fff5e1d8-0ba0-491f-b31f-5d5099c2a962" name="Default Changelist" comment="second attempt to trigger travis file">
+    <list default="true" id="fff5e1d8-0ba0-491f-b31f-5d5099c2a962" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,8 +26,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="40" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="40" />
+            <state relative-caret-position="360">
+              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
             </state>
           </provider>
         </entry>
@@ -200,7 +199,7 @@
       <workItem from="1562235790151" duration="7415000" />
       <workItem from="1562243420559" duration="3495000" />
       <workItem from="1562247769091" duration="11919000" />
-      <workItem from="1562382006914" duration="4689000" />
+      <workItem from="1562382006914" duration="5018000" />
     </task>
     <task id="LOCAL-00001" summary="travis file and commands to push images to docker hub after test and build completes">
       <created>1562256738737</created>
@@ -293,11 +292,25 @@
       <option name="project" value="LOCAL" />
       <updated>1562396005079</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="second attempt to trigger travis file">
+      <created>1562396105059</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1562396105059</updated>
+    </task>
+    <task id="LOCAL-00015" summary="attempting to trigger travis file with travis ci">
+      <created>1562396163534</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1562396163534</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46379000" />
+    <option name="totallyTimeSpent" value="46708000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -327,9 +340,9 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" show_stripe_button="false" weight="0.32883435" />
       <window_info anchor="bottom" id="Docker" order="7" weight="0.32883435" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4963181" weight="0.32883435" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="8" sideWeight="0.4963181" visible="true" weight="0.32883435" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49558175" visible="true" weight="0.3190184" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49558175" weight="0.3190184" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5036819" side_tool="true" weight="0.32883435" />
       <window_info anchor="bottom" id="Messages" order="12" />
       <window_info anchor="bottom" id="Inspection Results" order="13" sideWeight="0.4992636" weight="0.32883435" />
@@ -365,7 +378,8 @@
     <MESSAGE value="completely changed the travis file, just to attempt a trigger" />
     <MESSAGE value="changed in travis file (react-test to multi-docker) - attempting a trigger on travis" />
     <MESSAGE value="second attempt to trigger travis file" />
-    <option name="LAST_COMMIT_MESSAGE" value="second attempt to trigger travis file" />
+    <MESSAGE value="attempting to trigger travis file with travis ci" />
+    <option name="LAST_COMMIT_MESSAGE" value="attempting to trigger travis file with travis ci" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/worker/package-lock.json" />
@@ -582,8 +596,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="40" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="40" />
+        <state relative-caret-position="360">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
         </state>
       </provider>
     </entry>
