@@ -30,7 +30,7 @@
           "containerPort": 80
         }
       ],
-      "links": ["client", "nginx", "server"]
+      "links": ["client", "server"]
 
     }
   ]
