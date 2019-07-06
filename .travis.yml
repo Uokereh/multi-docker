@@ -8,6 +8,7 @@ before_install:
 script:
   - docker run uokereh/multi-docker npm run build
 
+after_script:
   -docker build -t uokereh/client ./client
   -docker build -t uokereh/nginx ./nginx
   -docker build -t uokereh/server ./server
