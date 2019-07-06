@@ -14,9 +14,3 @@ after_success:
   -docker build -t uokereh/server ./server
   -docker build -t uokereh/worker ./worker
 
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-
-  - docker push uokereh/client
-  - docker push uokereh/nginx
-  - docker push uokereh/server
-  - docker push uokereh/worker
