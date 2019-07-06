@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fff5e1d8-0ba0-491f-b31f-5d5099c2a962" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,7 +28,7 @@
         <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="360">
-              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+              <caret line="24" selection-start-line="24" selection-end-line="24" />
             </state>
           </provider>
         </entry>
@@ -102,8 +103,8 @@
         <option value="$PROJECT_DIR$/client/src/App.test.js" />
         <option value="$PROJECT_DIR$/client/nginx/default.conf" />
         <option value="$PROJECT_DIR$/client/package-lock.json" />
-        <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/Dockerrun.aws.json" />
+        <option value="$PROJECT_DIR$/.travis.yml" />
       </list>
     </option>
   </component>
@@ -199,7 +200,7 @@
       <workItem from="1562235790151" duration="7415000" />
       <workItem from="1562243420559" duration="3495000" />
       <workItem from="1562247769091" duration="11919000" />
-      <workItem from="1562382006914" duration="3703000" />
+      <workItem from="1562382006914" duration="4386000" />
     </task>
     <task id="LOCAL-00001" summary="travis file and commands to push images to docker hub after test and build completes">
       <created>1562256738737</created>
@@ -264,11 +265,25 @@
       <option name="project" value="LOCAL" />
       <updated>1562393689936</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="idk...just to trigger travis to build">
+      <created>1562394959848</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1562394959848</updated>
+    </task>
+    <task id="LOCAL-00011" summary="completely changed the travis file, just to attempt a trigger">
+      <created>1562395213014</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1562395213014</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45393000" />
+    <option name="totallyTimeSpent" value="46076000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -333,7 +348,8 @@
     <MESSAGE value="create AWS EB" />
     <MESSAGE value="fixed error" />
     <MESSAGE value="idk...just to trigger travis to build" />
-    <option name="LAST_COMMIT_MESSAGE" value="idk...just to trigger travis to build" />
+    <MESSAGE value="completely changed the travis file, just to attempt a trigger" />
+    <option name="LAST_COMMIT_MESSAGE" value="completely changed the travis file, just to attempt a trigger" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/worker/package-lock.json" />
@@ -551,7 +567,7 @@
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
         </state>
       </provider>
     </entry>
