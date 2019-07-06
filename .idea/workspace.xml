@@ -27,8 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+            <state relative-caret-position="240">
+              <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -200,7 +200,7 @@
       <workItem from="1562235790151" duration="7415000" />
       <workItem from="1562243420559" duration="3495000" />
       <workItem from="1562247769091" duration="11919000" />
-      <workItem from="1562382006914" duration="5695000" />
+      <workItem from="1562382006914" duration="5992000" />
     </task>
     <task id="LOCAL-00001" summary="travis file and commands to push images to docker hub after test and build completes">
       <created>1562256738737</created>
@@ -321,11 +321,25 @@
       <option name="project" value="LOCAL" />
       <updated>1562397097871</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="attempting to trigger travis file with travis ci">
+      <created>1562397239718</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1562397239718</updated>
+    </task>
+    <task id="LOCAL-00019" summary="attempting to trigger travis file with travis ci">
+      <created>1562397370070</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1562397370070</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47385000" />
+    <option name="totallyTimeSpent" value="47682000" />
   </component>
   <component name="TodoView" selected-index="3">
     <todo-panel id="selected-file">
@@ -611,8 +625,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        <state relative-caret-position="240">
+          <caret line="16" column="16" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
         </state>
       </provider>
     </entry>

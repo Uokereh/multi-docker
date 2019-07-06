@@ -13,3 +13,5 @@ after_success:
   -docker build -t uokereh/multi-nginx ./nginx
   -docker build -t uokereh/multi-server ./server
   -docker build -t uokereh/multi-worker ./worker
+
+  - echo "$DOCK_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
