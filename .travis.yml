@@ -3,10 +3,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t uokereh/multi-docker -f ./client/Dockerfile.dev ./client
+  - docker build -t uokereh/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run uokereh/multi-docker npm run build
+  - docker run uokereh/react-test npm run build
 
 after_success:
   -docker build -t uokereh/multi-client ./client
@@ -20,3 +20,16 @@ after_success:
   - docker push uokereh/multi-nginx
   - docker push uokereh/multi-server
   - docker push uokereh/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "docker-react"
+  env: "DockerReact-env"
+  bucket_name: "elasticbeanstalk-us-east-1-958923515642"
+  bucket_path: "docker-react"
+  on:
+    branch: master
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
