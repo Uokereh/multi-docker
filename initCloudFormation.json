@@ -10,7 +10,7 @@
           "Version": "2012-10-17",
           "Statement": [
             {
-              "Sid": "DenyIncorrectEncryptionHeader",
+              "Sid": ["DenyIncorrectEncryptionHeader", "DenyUnEncryptedObjectUploads"],
               "Effect": "Deny",
               "Principal": "*",
               "Action": "s3:PutObject",
