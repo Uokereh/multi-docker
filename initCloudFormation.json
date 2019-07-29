@@ -4,15 +4,11 @@
 
   "Resources": {
     "S3StateAndSoftware": {
-      "Type": "AWS::S3::Bucket",
-      "Properties": {
-        "AccessControl" : "Private",
-        "ForceEncryption": {
           "Type": "AWS::S3::BucketPolicy",
           "Properties": {
             "Bucket": "S3StateAndSoftware",
             "PolicyDocument": {
-              "Version": "2008-10-17",
+              "Version": "2012-10-17",
               "Statement": [
                 {
                   "Sid": "DenyIncorrectEncryptionHeader",
@@ -62,13 +58,7 @@
                 }
               ]
             }
-          },
-          "DependsOn": "S3StateAndSoftware"
-        },
-        "BucketName": {
-          "Description":"S3StateAndSoftware"
-        }
-      }
+          }
     },
     "CodeBuildRole": {
       "Type": "AWS::IAM::Role",
