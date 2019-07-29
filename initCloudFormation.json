@@ -10,7 +10,7 @@
         "ForceEncryption": {
           "Type": "AWS::S3::BucketPolicy",
           "Properties": {
-            "Bucket": null,
+            "Bucket": "S3StateAndSoftware",
             "PolicyDocument": {
               "Version": "2008-10-17",
               "Statement": [
@@ -19,7 +19,18 @@
                   "Effect": "Deny",
                   "Principal": "*",
                   "Action": "s3:PutObject",
-                  "Resource": "arn:aws:s3:::",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:s3:::",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        "mss-devsecops-initialization-terraform-state"
+                      ]
+                    ]
+                  },
                   "Condition": {
                     "StringNotEquals": {
                       "s3:x-amz-server-side-encryption": "AES256"
@@ -31,7 +42,18 @@
                   "Effect": "Deny",
                   "Principal": "*",
                   "Action": "s3:PutObject",
-                  "Resource": "arn:aws:s3:::",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:aws:s3:::",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        "mss-devsecops-initialization-terraform-state"
+                      ]
+                    ]
+                  },
                   "Condition": {
                     "Null": {
                       "s3:x-amz-server-side-encryption": true
@@ -44,15 +66,7 @@
           "DependsOn": "S3StateAndSoftware"
         },
         "BucketName": {
-          "Fn::Join": [
-            "",
-            [
-              {
-                "Ref": "AWS::Region"
-              },
-              "mss-devsecops-initialization-terraform-state"
-            ]
-          ]
+          "Description":"S3StateAndSoftware"
         }
       }
     },
