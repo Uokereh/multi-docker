@@ -6,14 +6,51 @@
     "S3StateAndSoftware": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
+        "AccessControl" : "Private",
+        "ForceEncryption": {
+          "Type": "AWS::S3::BucketPolicy",
+          "Properties": {
+            "Bucket": null,
+            "PolicyDocument": {
+              "Version": "2008-10-17",
+              "Statement": [
+                {
+                  "Sid": "DenyIncorrectEncryptionHeader",
+                  "Effect": "Deny",
+                  "Principal": "*",
+                  "Action": "s3:PutObject",
+                  "Resource": "arn:aws:s3:::",
+                  "Condition": {
+                    "StringNotEquals": {
+                      "s3:x-amz-server-side-encryption": "AES256"
+                    }
+                  }
+                },
+                {
+                  "Sid": "DenyUnEncryptedObjectUploads",
+                  "Effect": "Deny",
+                  "Principal": "*",
+                  "Action": "s3:PutObject",
+                  "Resource": "arn:aws:s3:::",
+                  "Condition": {
+                    "Null": {
+                      "s3:x-amz-server-side-encryption": true
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "DependsOn": "S3StateAndSoftware"
+        },
         "BucketName": {
           "Fn::Join": [
-            ".",
+            "",
             [
               {
                 "Ref": "AWS::Region"
               },
-              "terraform-state-software"
+              "mss-devsecops-initialization-terraform-state"
             ]
           ]
         }
