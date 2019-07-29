@@ -1,189 +1,212 @@
 {
   "Description": "Automate provisioning of CodeBuild with CodePipeline",
   "AWSTemplateFormatVersion": "2010-09-09",
-
   "Resources": {
     "S3StateAndSoftware": {
-          "Type": "AWS::S3::BucketPolicy",
-          "Properties": {
-            "Bucket": "S3StateAndSoftware",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Sid": "DenyIncorrectEncryptionHeader",
-                  "Effect": "Deny",
-                  "Principal": "*",
-                  "Action": "s3:PutObject",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:aws:s3:::",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        "mss-devsecops-initialization-terraform-state"
-                      ]
-                    ]
-                  },
-                  "Condition": {
-                    "StringNotEquals": {
-                      "s3:x-amz-server-side-encryption": "AES256"
-                    }
-                  }
-                },
-                {
-                  "Sid": "DenyUnEncryptedObjectUploads",
-                  "Effect": "Deny",
-                  "Principal": "*",
-                  "Action": "s3:PutObject",
-                  "Resource": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:aws:s3:::",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        "mss-devsecops-initialization-terraform-state"
-                      ]
-                    ]
-                  },
-                  "Condition": {
-                    "Null": {
-                      "s3:x-amz-server-side-encryption": true
-                    }
-                  }
-                }
-              ]
-            }
-          }
-    },
-    "CodeBuildRole": {
-      "Type": "AWS::IAM::Role",
+      "Type": "AWS::S3::BucketPolicy",
       "Properties": {
-        "AssumeRolePolicyDocument": {
+        "Bucket" : "S3StateAndSoftware",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
           "Statement": [
             {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "codebuild.amazonaws.com"
+              "Sid": "DenyIncorrectEncryptionHeader",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Action": "s3:PutObject",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "mss-devsecops-initialization-terraform-state"
+                  ]
                 ]
               },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Path": "/",
-        "Policies": [
-          {
-            "PolicyName": "codebuild-service",
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": "*",
-                  "Resource": "*"
+              "Condition": {
+                "StringNotEquals": {
+                  "s3:x-amz-server-side-encryption": "AES256"
                 }
-              ],
-              "Version": "2012-10-17"
-            }
-          }
-        ]
-      }
-    },
-    "CodePipelineRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
+              }
+            },
             {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "codepipeline.amazonaws.com"
+              "Sid": "DenyUnEncryptedObjectUploads",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Action": "s3:PutObject",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "mss-devsecops-initialization-terraform-state"
+                  ]
                 ]
               },
-              "Action": [
-                "sts:AssumeRole"
-              ]
+              "Condition": {
+                "Null": {
+                  "s3:x-amz-server-side-encryption": true
+                }
+              }
             }
           ]
-        },
-        "Path": "/",
-        "Policies": [
-          {
-            "PolicyName": "codepipeline-service",
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Action": "*",
-                  "Resource": "*",
-                  "Effect": "Allow"
-                },
-                {
-                  "Action": [
-                    "s3:GetObject",
-                    "s3:GetObjectVersion",
-                    "s3:GetBucketVersioning"
-                  ],
-                  "Resource": "*",
-                  "Effect": "Allow"
-                },
-                {
-                  "Action": [
-                    "s3:PutObject"
-                  ],
-                  "Resource": [
-                    "arn:aws:s3:::codepipeline*"
-                  ],
-                  "Effect": "Allow"
-                }
-              ],
-              "Version": "2012-10-17"
-            }
-          }
-        ]
+        }
       }
     },
-    "CodeBuildTERRAFORM": {
-      "Type": "AWS::CodeBuild::Project",
-      "DependsOn": "CodeBuildRole",
+    "DDBTable": {
+      "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "Name": {
-          "Ref": "AWS::StackName"
-        },
-        "Description": "NEEDS TO BE MODIFIED",
-        "ServiceRole": {
-          "Fn::GetAtt": [
-            "CodeBuildRole",
-            "Arn"
-          ]
-        },
-        "Artifacts": {
-          "Type": "no_artifacts"
-        },
-        "Environment": {
-          "Type": "linuxContainer",
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/python:2.7.12"
-        },
-        "Source": {
-          "Location": "https://github.com/MetroStarDevSecOps/BDSOInfrastrucure.git",
-          "Type": "GITHUB"
-        },
-        "TimeoutInMinutes": 10,
-        "Tags": [
+        "AttributeDefinitions": [
           {
-            "Key": "Project",
-            "Value": "Run Terraform From CodeBuild"
+            "AttributeName": "ArtistId",
+            "AttributeType": "S"
           }
-        ]
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "ArtistId",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+        "SSESpecification": {
+          "SSEEnabled" : true
+        }
+      }
+    },
+      "CodeBuildRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "AssumeRolePolicyDocument": {
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": [
+                    "codebuild.amazonaws.com"
+                  ]
+                },
+                "Action": [
+                  "sts:AssumeRole"
+                ]
+              }
+            ]
+          },
+          "Path": "/",
+          "Policies": [
+            {
+              "PolicyName": "codebuild-service",
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Action": "*",
+                    "Resource": "*"
+                  }
+                ],
+                "Version": "2012-10-17"
+              }
+            }
+          ]
+        }
+      },
+      "CodePipelineRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "AssumeRolePolicyDocument": {
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": [
+                    "codepipeline.amazonaws.com"
+                  ]
+                },
+                "Action": [
+                  "sts:AssumeRole"
+                ]
+              }
+            ]
+          },
+          "Path": "/",
+          "Policies": [
+            {
+              "PolicyName": "codepipeline-service",
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "*",
+                    "Resource": "*",
+                    "Effect": "Allow"
+                  },
+                  {
+                    "Action": [
+                      "s3:GetObject",
+                      "s3:GetObjectVersion",
+                      "s3:GetBucketVersioning"
+                    ],
+                    "Resource": "*",
+                    "Effect": "Allow"
+                  },
+                  {
+                    "Action": [
+                      "s3:PutObject"
+                    ],
+                    "Resource": [
+                      "arn:aws:s3:::codepipeline*"
+                    ],
+                    "Effect": "Allow"
+                  }
+                ],
+                "Version": "2012-10-17"
+              }
+            }
+          ]
+        }
+      },
+      "CodeBuildTERRAFORM": {
+        "Type": "AWS::CodeBuild::Project",
+        "DependsOn": "CodeBuildRole",
+        "Properties": {
+          "Name": {
+            "Ref": "AWS::StackName"
+          },
+          "Description": "NEEDS TO BE MODIFIED",
+          "ServiceRole": {
+            "Fn::GetAtt": [
+              "CodeBuildRole",
+              "Arn"
+            ]
+          },
+          "Artifacts": {
+            "Type": "no_artifacts"
+          },
+          "Environment": {
+            "Type": "linuxContainer",
+            "ComputeType": "BUILD_GENERAL1_SMALL",
+            "Image": "aws/codebuild/python:2.7.12"
+          },
+          "Source": {
+            "Location": "https://github.com/MetroStarDevSecOps/BDSOInfrastrucure.git",
+            "Type": "GITHUB"
+          },
+          "TimeoutInMinutes": 10,
+          "Tags": [
+            {
+              "Key": "Project",
+              "Value": "Run Terraform From CodeBuild"
+            }
+          ]
+        }
       }
     }
-  }
 }
