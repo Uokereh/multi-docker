@@ -1,0 +1,285 @@
+# Entry point for the configuration of the global infrastructure
+# in the AWS environment.
+#
+# Author: Chris O.
+# Date: 07/29/2019
+
+###############################################################################
+# CLOUD FORMATION INITIALIZATION
+###############################################################################
+
+# Initialize the Cloud Formation to bring up CodePipeline, CodeBuild, S3 Bucket Remote State,
+# DynamoBD State Lock
+
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Pipeline using CodePipeline and CodeBuild for continuous delivery of a
+  single-page application to S3
+
+# Cloud Formation provisions CodePipeline and CodeBuild to use the below build parameters to access GitHub Repo
+Parameters:
+  GitHubUser:
+    Type: String
+    Description: GitHub User
+    Default: Uokereh
+  GitHubRepo:
+    Type: String
+    Description: GitHub Repo to pull from. Only the Name. not the URL
+    Default: multi-docker
+  GitHubBranch:
+    Type: String
+    Description: GitHub Branch
+    Default: master
+  GitHubToken:
+    NoEcho: true
+    Type: String
+    Description: Secret token here
+
+  #Cloud Formation provisions  CodePipeline and CodeBuild to use the below build parameters to build out infrastructure
+  BuildType:
+    Type: String
+    Default: linuxContainer
+    Description: The build container type to use for building the app
+  BuildComputeType:
+    Type: String
+    Default: BUILD_GENERAL1_SMALL
+    Description: The build compute type to use for building the app
+  BuildImage:
+    Type: String
+    Default: 'aws/codebuild/ubuntu-base:14.04'
+    Description: The build image to use for building the app
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: GitHub Configuration
+        Parameters:
+          - GitHubToken
+          - GitHubUser
+          - GitHubRepo
+          - GitHubBranch
+      - Label:
+          default: Build Configuration
+        Parameters:
+          - BuildType
+          - BuildComputeType
+          - BuildImage
+    ParameterLabels:
+      GitHubToken:
+        default: GitHub OAuth2 Token
+      GitHubUser:
+        default: GitHub User/Org Name
+      GitHubRepo:
+        default: GitHub Repository Name
+      GitHubBranch:
+        default: GitHub Branch Name
+      BuildType:
+        default: CodeBuild type
+      BuildComputeType:
+        default: CodeBuild instance type
+      BuildImage:
+        default: CodeBuild image
+
+###############################################################################
+# CLOUD FORMATION RESOURCES
+###############################################################################
+
+Resources:
+
+  # Provisions necessary IAM Role for CodeBuild
+  CodeBuildRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: codebuild-service
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+            Version: 2012-10-17
+
+  # Provisions necessary IAM Role for CodePipeline
+  CodePipelineRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: codepipeline-service
+          PolicyDocument:
+            Statement:
+              - Action:
+                  - 'codebuild:*'
+                Resource: '*'
+                Effect: Allow
+              - Action:
+                  - 's3:GetObject'
+                  - 's3:GetObjectVersion'
+                  - 's3:GetBucketVersioning'
+                Resource: '*'
+                Effect: Allow
+              - Action:
+                  - 's3:PutObject'
+                Resource:
+                  - 'arn:aws:s3:::codepipeline*'
+                Effect: Allow
+              - Action:
+                  - 's3:*'
+                  - 'cloudformation:*'
+                  - 'ecs:*'
+                  - 'iam:PassRole'
+                Resource: '*'
+                Effect: Allow
+            Version: 2012-10-17
+
+  # Provisions necessary S3 Bucket with default SSE for Terraform Remote State
+  PipelineBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: metrostarsystems-devsecops-initialization-terraform-state
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  # Provisions S3 Bucket Policy to Lock down access to Bucket and enable DENY UNENCRYPTED OBJECTS & INSECURE CONNECTIONS
+  PipelineBucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref PipelineBucket
+      PolicyDocument:
+        Statement:
+          - Sid: DenyUnEncryptedObjectUploads
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:PutObject'
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref PipelineBucket
+                - /*
+            Condition:
+              StringNotEquals:
+                's3:x-amz-server-side-encryption': AES256
+          - Sid: DenyInsecureConnections
+            Effect: Deny
+            Principal: "*"
+            Action: "s3:*"
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref PipelineBucket
+                - /*
+            Condition:
+              Bool:
+                "aws:SecureTransport": false
+
+  # Provisions necessary DynamoDB table for S3 Remote State lock
+  DDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: metrostarsystems-devsecops-initialization-terraform-state-lock
+      AttributeDefinitions:
+        - AttributeName: StateId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: StateId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      SSESpecification:
+        SSEEnabled: true
+
+  # Provisions necessary CodeBuild Project that will build out our Terraform Infrastructure
+  CodeBuildDeploySite:
+    Type: 'AWS::CodeBuild::Project'
+    DependsOn: CodeBuildRole
+    Properties:
+      Name: !Sub '${AWS::StackName}-DeploySite'
+      Description: Deploy to S3
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: !Ref BuildType
+        ComputeType: !Ref BuildComputeType
+        Image: !Sub '${BuildImage}'
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+          version: 0.1
+          phases:
+            post_build:
+              commands:
+                - aws s3 cp --recursive --acl public-read ./ s3://${PipelineBucket}/
+          artifacts:
+            type: zip
+            files:
+              - index.html
+      TimeoutInMinutes: 10
+
+  # Provisions CodePipeline for CI/CD process
+  Pipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      Name: github-event-pipeline
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      Stages:
+        - Name: Source
+          Actions:
+            - InputArtifacts: []
+              Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Version: '1'
+                Provider: GitHub
+              OutputArtifacts:
+                - Name: SourceOutput
+              Configuration:
+                Owner: !Ref GitHubUser
+                Repo: !Ref GitHubRepo
+                Branch: !Ref GitHubBranch
+                OAuthToken: !Ref GitHubToken
+              RunOrder: 1
+        - Name: Deploy
+          Actions:
+            - Name: Artifact
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: '1'
+                Provider: CodeBuild
+              InputArtifacts:
+                - Name: SourceOutput
+              OutputArtifacts:
+                - Name: DeployOutput
+              Configuration:
+                ProjectName: !Ref CodeBuildDeploySite
+              RunOrder: 1
+      ArtifactStore:
+        Type: S3
+        Location: !Ref PipelineBucket
+Outputs:
+  CodePipelineUrl:
+    Value: !Sub >-
+      https://console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${Pipeline}
+    Description: CodePipeline URL
